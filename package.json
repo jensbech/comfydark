@@ -1,0 +1,24 @@
+{
+  "name": "comfydark",
+  "displayName": "ComfyDark",
+  "description": "VS Code theme with item colors from `GitHub Dark Default` with default VS Code syntax highlighting colors.",
+  "version": "1.0.1",
+  "engines": {
+    "vscode": "^1.99.0"
+  },
+  "categories": [
+    "Themes"
+  ],
+  "icon": "images/icon.png",
+  "publisher": "JensBech-Srensen",
+  "repository": {"url": "https://github.com/jensbech/ComfyDark"},
+  "contributes": {
+    "themes": [
+      {
+        "label": "ComfyDark",
+        "uiTheme": "vs-dark",
+        "path": "./themes/comfydark.json"
+      }
+    ]
+  }
+}
