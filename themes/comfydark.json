@@ -586,6 +586,16 @@
     "string": "#ce9178",
     "number": "#b5cea8",
     "regexp": "#d16969",
-    "operator": "#d4d4d4"
+    "operator": "#C586C0",
+    "decorator": "#DCDCAA",
+    "typeAlias": "#4EC9B0",
+    "macro": "#569CD6",
+    "formatSpecifier": "#569CD6",
+    "escapeSequence": "#d7ba7d",
+    "label": "#C8C8C8",
+    "module": "#4EC9B0",
+    "selfKeyword": "#569CD6",
+    "plainKeyword": "#569CD6",
+    "controlKeyword": "#C586C0"
   }
 }
