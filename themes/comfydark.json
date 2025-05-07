@@ -1,5 +1,5 @@
 {
-  "name": "GitHub Dark Default with Dark+ Syntax",
+  "name": "ComfyDark",
   "type": "dark",
   "colors": {
     "editor.background": "#0d1117",
@@ -8,6 +8,7 @@
     "activityBar.foreground": "#c9d1d9",
     "sideBar.background": "#0d1117",
     "sideBar.foreground": "#c9d1d9",
+    "sideBar.border": "#30363d",
     "titleBar.activeBackground": "#0d1117",
     "titleBar.activeForeground": "#c9d1d9",
     "statusBar.background": "#0d1117",
