@@ -2,7 +2,7 @@
   "name": "comfydark",
   "displayName": "ComfyDark",
   "description": "VS Code theme using item colors from GitHub Dark Default combined with the default VS Code syntax highlighting colors",
-  "version": "1.0.9",
+  "version": "1.0.12n",
   "engines": {
     "vscode": "^1.99.0"
   },

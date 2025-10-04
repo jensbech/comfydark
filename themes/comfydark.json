@@ -1,29 +1,65 @@
 {
+  "$schema": "vscode://schemas/color-theme",
   "name": "ComfyDark",
   "type": "dark",
   "colors": {
     "editor.background": "#0d1117",
     "editor.foreground": "#c9d1d9",
+    "editor.selectionBackground": "#264f78",
+    "editor.lineHighlightBackground": "#161b22",
+    "editor.findMatchBackground": "#9e6a03",
     "activityBar.background": "#0d1117",
     "activityBar.foreground": "#c9d1d9",
+    "activityBar.inactiveForeground": "#8b949e",
     "sideBar.background": "#0d1117",
     "sideBar.foreground": "#c9d1d9",
     "sideBar.border": "#30363d",
     "titleBar.activeBackground": "#0d1117",
     "titleBar.activeForeground": "#c9d1d9",
+    "titleBar.border": "#30363d",
     "statusBar.background": "#0d1117",
     "statusBar.foreground": "#c9d1d9",
+    "statusBar.border": "#30363d",
     "tab.activeBackground": "#161b22",
     "tab.inactiveBackground": "#0d1117",
+    "tab.activeForeground": "#c9d1d9",
+    "tab.inactiveForeground": "#8b949e",
+    "tab.border": "#30363d",
     "panel.background": "#0d1117",
-    "terminal.background": "#0d1117",
+    "panel.border": "#30363d",
+    "terminal.foreground": "#c9d1d9",
     "editorGroupHeader.tabsBackground": "#0d1117",
+    "editorGroupHeader.tabsBorder": "#30363d",
     "dropdown.background": "#161b22",
     "dropdown.border": "#30363d",
+    "dropdown.foreground": "#c9d1d9",
+    "input.background": "#161b22",
+    "input.border": "#30363d",
+    "input.foreground": "#c9d1d9",
+    "input.placeholderForeground": "#8b949e",
+    "button.background": "#1f6feb",
+    "button.foreground": "#ffffff",
+    "button.hoverBackground": "#388bfd",
+    "focusBorder": "#1f6feb",
     "list.activeSelectionBackground": "#1f6feb",
-    "list.hoverBackground": "#161b22"
+    "list.hoverBackground": "#161b22",
+    "list.inactiveSelectionBackground": "#264f78",
+    "errorForeground": "#f85149",
+    "editorWarning.foreground": "#d29922",
+    "breadcrumb.foreground": "#8b949e",
+    "breadcrumb.focusForeground": "#c9d1d9",
+    "breadcrumb.activeSelectionForeground": "#c9d1d9"
   },
   "tokenColors": [
+    {
+      "scope": [
+        "meta.embedded",
+        "source.groovy.embedded"
+      ],
+      "settings": {
+        "foreground": "#D4D4D4"
+      }
+    },
     {
       "scope": "emphasis",
       "settings": {
@@ -369,7 +405,6 @@
         "foreground": "#569cd6"
       }
     },
-    
     {
       "name": "Function declarations",
       "scope": [
@@ -431,8 +466,7 @@
         "support.constant.math",
         "support.constant.dom",
         "support.constant.json",
-        "entity.other.inherited-class",
-        "punctuation.separator.namespace.ruby"
+        "entity.other.inherited-class"
       ],
       "settings": {
         "foreground": "#4EC9B0"
@@ -562,41 +596,5 @@
         "foreground": "#C8C8C8"
       }
     }
-  ],
-  "semanticHighlighting": true,
-  "semanticTokenColors": {
-    "newOperator":"#C586C0",
-    "stringLiteral":"#ce9178",
-    "customLiteral": "#DCDCAA",
-    "numberLiteral": "#b5cea8",
-    "namespace": "#4EC9B0",
-    "class": "#4EC9B0",
-    "enum": "#4EC9B0",
-    "interface": "#4EC9B0",
-    "struct": "#4EC9B0",
-    "type": "#4EC9B0",
-    "typeParameter": "#4EC9B0",
-    "parameter": "#9CDCFE",
-    "variable": "#9CDCFE",
-    "property": "#9CDCFE",
-    "enumMember": "#4FC1FF",
-    "function": "#DCDCAA",
-    "method": "#DCDCAA",
-    "keyword": "#C586C0",
-    "comment": "#6A9955",
-    "string": "#ce9178",
-    "number": "#b5cea8",
-    "regexp": "#d16969",
-    "operator": "#C586C0",
-    "decorator": "#DCDCAA",
-    "typeAlias": "#4EC9B0",
-    "macro": "#569CD6",
-    "formatSpecifier": "#569CD6",
-    "escapeSequence": "#d7ba7d",
-    "label": "#C8C8C8",
-    "module": "#4EC9B0",
-    "selfKeyword": "#569CD6",
-    "plainKeyword": "#569CD6",
-    "controlKeyword": "#C586C0"
-  }
+  ]
 }
