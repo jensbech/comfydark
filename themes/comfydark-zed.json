@@ -1,6 +1,6 @@
 {
   "$schema": "https://zed.dev/schema/themes/v0.2.0.json",
-  "name": "ComfyDark Zed 3 Punchy",
+  "name": "ComfyDark Zed",
   "author": "jensbech",
   "themes": [
     {
@@ -18,7 +18,7 @@
         "background": "#0d1117FF",
         "element.background": "#0d1117FF",
         "element.hover": "#161b22FF",
-        "element.active": "#2a7dff33",
+        "element.acti": "#2a7dff33",
         "element.selected": "#2a7dff4D",
         "element.disabled": "#161b22AA",
         "drop_target.background": "#2a7dff33",
