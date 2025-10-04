@@ -8,3 +8,4 @@ VS Code & Zed themes using item colors from [GitHub Dark Default](https://market
 ## Screenshot example
 
 ![Screenshot](https://raw.githubusercontent.com/jensbech/ComfyDark/main/images/screenshot.png)
+a
