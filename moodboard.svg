@@ -1,0 +1,242 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720" width="1200" height="720" role="img" aria-label="ComfyDark palette moodboard">
+  <defs>
+    <pattern id="dots" width="36" height="36" patternUnits="userSpaceOnUse">
+      <circle cx="1" cy="1" r="1" fill="#30363d" opacity="0.35"/>
+    </pattern>
+    <radialGradient id="glowBlue" cx="0.2" cy="0.15" r="0.6">
+      <stop offset="0" stop-color="#1f6feb" stop-opacity="0.18"/>
+      <stop offset="1" stop-color="#1f6feb" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="glowPurple" cx="0.85" cy="0.85" r="0.55">
+      <stop offset="0" stop-color="#c586c0" stop-opacity="0.10"/>
+      <stop offset="1" stop-color="#c586c0" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="panelStroke" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#30363d" stop-opacity="1"/>
+      <stop offset="1" stop-color="#30363d" stop-opacity="0.4"/>
+    </linearGradient>
+    <style><![CDATA[
+      .title { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Inter", sans-serif; font-weight: 800; letter-spacing: -0.02em; }
+      .sub   { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Inter", sans-serif; font-weight: 400; }
+      .label { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Inter", sans-serif; font-weight: 600; font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; }
+      .chipName { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Inter", sans-serif; font-weight: 500; font-size: 11px; }
+      .chipHex  { font-family: "SF Mono", "JetBrains Mono", Menlo, ui-monospace, monospace; font-size: 10px; letter-spacing: 0.02em; }
+      .code  { font-family: "SF Mono", "JetBrains Mono", Menlo, ui-monospace, monospace; font-size: 13px; }
+      .chrome{ font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; font-weight: 500; font-size: 11px; }
+      .hx1 { font-family: -apple-system, BlinkMacSystemFont, sans-serif; font-weight: 700; font-size: 22px; letter-spacing: -0.01em; }
+      .hx2 { font-family: -apple-system, BlinkMacSystemFont, sans-serif; font-weight: 700; font-size: 18px; letter-spacing: -0.01em; }
+      .hx3 { font-family: -apple-system, BlinkMacSystemFont, sans-serif; font-weight: 700; font-size: 15px; }
+      .md  { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; font-size: 13px; }
+      .quote { font-family: -apple-system, BlinkMacSystemFont, sans-serif; font-style: italic; font-size: 13px; }
+    ]]></style>
+  </defs>
+
+  <rect width="1200" height="720" fill="#0d1117"/>
+  <rect width="1200" height="720" fill="url(#dots)"/>
+  <rect width="1200" height="720" fill="url(#glowBlue)"/>
+  <rect width="1200" height="720" fill="url(#glowPurple)"/>
+
+  <g transform="translate(60, 70)">
+    <text class="title" x="0" y="48" font-size="60" fill="#c9d1d9">Comfy<tspan fill="#569cd6">Dark</tspan></text>
+    <text class="sub" x="0" y="82" font-size="14" fill="#8b949e">A cozy dark palette · GitHub Dark UI meets VS Code syntax</text>
+  </g>
+
+  <g transform="translate(60, 200)">
+    <text class="label" x="0" y="0" fill="#8b949e">Surface</text>
+    <g transform="translate(0, 14)">
+      <g transform="translate(0,0)">
+        <rect width="86" height="56" rx="8" fill="#0d1117" stroke="#30363d"/>
+        <text class="chipName" x="0" y="74" fill="#c9d1d9">bg</text>
+        <text class="chipHex"  x="0" y="88" fill="#8b949e">#0d1117</text>
+      </g>
+      <g transform="translate(94,0)">
+        <rect width="86" height="56" rx="8" fill="#161b22" stroke="#30363d"/>
+        <text class="chipName" x="0" y="74" fill="#c9d1d9">bg-alt</text>
+        <text class="chipHex"  x="0" y="88" fill="#8b949e">#161b22</text>
+      </g>
+      <g transform="translate(188,0)">
+        <rect width="86" height="56" rx="8" fill="#30363d"/>
+        <text class="chipName" x="0" y="74" fill="#c9d1d9">border</text>
+        <text class="chipHex"  x="0" y="88" fill="#8b949e">#30363d</text>
+      </g>
+      <g transform="translate(282,0)">
+        <rect width="86" height="56" rx="8" fill="#c9d1d9"/>
+        <text class="chipName" x="0" y="74" fill="#c9d1d9">fg</text>
+        <text class="chipHex"  x="0" y="88" fill="#8b949e">#c9d1d9</text>
+      </g>
+      <g transform="translate(376,0)">
+        <rect width="86" height="56" rx="8" fill="#8b949e"/>
+        <text class="chipName" x="0" y="74" fill="#c9d1d9">fg-muted</text>
+        <text class="chipHex"  x="0" y="88" fill="#8b949e">#8b949e</text>
+      </g>
+      <g transform="translate(470,0)">
+        <rect width="86" height="56" rx="8" fill="#1f6feb"/>
+        <text class="chipName" x="0" y="74" fill="#c9d1d9">accent</text>
+        <text class="chipHex"  x="0" y="88" fill="#8b949e">#1f6feb</text>
+      </g>
+    </g>
+
+    <text class="label" x="0" y="130" fill="#8b949e">Semantic</text>
+    <g transform="translate(0, 144)">
+      <g transform="translate(0,0)">
+        <rect width="86" height="56" rx="8" fill="#3fb950"/>
+        <text class="chipName" x="0" y="74" fill="#c9d1d9">success</text>
+        <text class="chipHex"  x="0" y="88" fill="#8b949e">#3fb950</text>
+      </g>
+      <g transform="translate(94,0)">
+        <rect width="86" height="56" rx="8" fill="#d29922"/>
+        <text class="chipName" x="0" y="74" fill="#c9d1d9">warning</text>
+        <text class="chipHex"  x="0" y="88" fill="#8b949e">#d29922</text>
+      </g>
+      <g transform="translate(188,0)">
+        <rect width="86" height="56" rx="8" fill="#f85149"/>
+        <text class="chipName" x="0" y="74" fill="#c9d1d9">error</text>
+        <text class="chipHex"  x="0" y="88" fill="#8b949e">#f85149</text>
+      </g>
+      <g transform="translate(282,0)">
+        <rect width="86" height="56" rx="8" fill="#264f78"/>
+        <text class="chipName" x="0" y="74" fill="#c9d1d9">selection</text>
+        <text class="chipHex"  x="0" y="88" fill="#8b949e">#264f78</text>
+      </g>
+      <g transform="translate(376,0)">
+        <rect width="86" height="56" rx="8" fill="#9e6a03"/>
+        <text class="chipName" x="0" y="74" fill="#c9d1d9">find-match</text>
+        <text class="chipHex"  x="0" y="88" fill="#8b949e">#9e6a03</text>
+      </g>
+      <g transform="translate(470,0)">
+        <rect width="86" height="56" rx="8" fill="#388bfd"/>
+        <text class="chipName" x="0" y="74" fill="#c9d1d9">accent+</text>
+        <text class="chipHex"  x="0" y="88" fill="#8b949e">#388bfd</text>
+      </g>
+    </g>
+
+    <text class="label" x="0" y="260" fill="#8b949e">Syntax</text>
+    <g transform="translate(0, 274)">
+      <g transform="translate(0,0)">
+        <rect width="86" height="56" rx="8" fill="#6a9955"/>
+        <text class="chipName" x="0" y="74" fill="#c9d1d9">comment</text>
+        <text class="chipHex"  x="0" y="88" fill="#8b949e">#6a9955</text>
+      </g>
+      <g transform="translate(94,0)">
+        <rect width="86" height="56" rx="8" fill="#569cd6"/>
+        <text class="chipName" x="0" y="74" fill="#c9d1d9">keyword</text>
+        <text class="chipHex"  x="0" y="88" fill="#8b949e">#569cd6</text>
+      </g>
+      <g transform="translate(188,0)">
+        <rect width="86" height="56" rx="8" fill="#c586c0"/>
+        <text class="chipName" x="0" y="74" fill="#c9d1d9">control</text>
+        <text class="chipHex"  x="0" y="88" fill="#8b949e">#c586c0</text>
+      </g>
+      <g transform="translate(282,0)">
+        <rect width="86" height="56" rx="8" fill="#ce9178"/>
+        <text class="chipName" x="0" y="74" fill="#c9d1d9">string</text>
+        <text class="chipHex"  x="0" y="88" fill="#8b949e">#ce9178</text>
+      </g>
+      <g transform="translate(376,0)">
+        <rect width="86" height="56" rx="8" fill="#b5cea8"/>
+        <text class="chipName" x="0" y="74" fill="#c9d1d9">number</text>
+        <text class="chipHex"  x="0" y="88" fill="#8b949e">#b5cea8</text>
+      </g>
+      <g transform="translate(470,0)">
+        <rect width="86" height="56" rx="8" fill="#9cdcfe"/>
+        <text class="chipName" x="0" y="74" fill="#c9d1d9">variable</text>
+        <text class="chipHex"  x="0" y="88" fill="#8b949e">#9cdcfe</text>
+      </g>
+    </g>
+    <g transform="translate(0, 374)">
+      <g transform="translate(0,0)">
+        <rect width="86" height="56" rx="8" fill="#dcdcaa"/>
+        <text class="chipName" x="0" y="74" fill="#c9d1d9">function</text>
+        <text class="chipHex"  x="0" y="88" fill="#8b949e">#dcdcaa</text>
+      </g>
+      <g transform="translate(94,0)">
+        <rect width="86" height="56" rx="8" fill="#4ec9b0"/>
+        <text class="chipName" x="0" y="74" fill="#c9d1d9">type</text>
+        <text class="chipHex"  x="0" y="88" fill="#8b949e">#4ec9b0</text>
+      </g>
+      <g transform="translate(188,0)">
+        <rect width="86" height="56" rx="8" fill="#4fc1ff"/>
+        <text class="chipName" x="0" y="74" fill="#c9d1d9">constant</text>
+        <text class="chipHex"  x="0" y="88" fill="#8b949e">#4fc1ff</text>
+      </g>
+      <g transform="translate(282,0)">
+        <rect width="86" height="56" rx="8" fill="#d16969"/>
+        <text class="chipName" x="0" y="74" fill="#c9d1d9">regex</text>
+        <text class="chipHex"  x="0" y="88" fill="#8b949e">#d16969</text>
+      </g>
+      <g transform="translate(376,0)">
+        <rect width="86" height="56" rx="8" fill="#d7ba7d"/>
+        <text class="chipName" x="0" y="74" fill="#c9d1d9">tag-alt</text>
+        <text class="chipHex"  x="0" y="88" fill="#8b949e">#d7ba7d</text>
+      </g>
+      <g transform="translate(470,0)">
+        <rect width="86" height="56" rx="8" fill="#d4d4d4"/>
+        <text class="chipName" x="0" y="74" fill="#c9d1d9">operator</text>
+        <text class="chipHex"  x="0" y="88" fill="#8b949e">#d4d4d4</text>
+      </g>
+    </g>
+  </g>
+
+  <g transform="translate(680, 200)">
+    <rect width="460" height="322" rx="12" fill="#161b22" stroke="url(#panelStroke)" stroke-width="1"/>
+    <rect width="460" height="36" rx="12" fill="#0d1117"/>
+    <rect y="24" width="460" height="12" fill="#0d1117"/>
+    <line x1="0" y1="36" x2="460" y2="36" stroke="#30363d" stroke-width="1"/>
+    <circle cx="18" cy="18" r="6" fill="#f85149"/>
+    <circle cx="38" cy="18" r="6" fill="#d29922"/>
+    <circle cx="58" cy="18" r="6" fill="#3fb950"/>
+    <text class="chrome" x="230" y="22" text-anchor="middle" fill="#8b949e">comfydark.ts</text>
+
+    <g transform="translate(24, 64)" class="code">
+      <text y="0">
+        <tspan fill="#6a9955">// ComfyDark — a cozy dark palette</tspan>
+      </text>
+      <text y="22">
+        <tspan fill="#c586c0">import</tspan><tspan fill="#c9d1d9"> { </tspan><tspan fill="#9cdcfe">Theme</tspan><tspan fill="#c9d1d9"> } </tspan><tspan fill="#c586c0">from</tspan><tspan fill="#c9d1d9"> </tspan><tspan fill="#ce9178">"./types"</tspan>
+      </text>
+      <text y="52">
+        <tspan fill="#c586c0">export</tspan><tspan fill="#c9d1d9"> </tspan><tspan fill="#569cd6">const</tspan><tspan fill="#c9d1d9"> </tspan><tspan fill="#4fc1ff">palette</tspan><tspan fill="#d4d4d4">:</tspan><tspan fill="#c9d1d9"> </tspan><tspan fill="#4ec9b0">Theme</tspan><tspan fill="#c9d1d9"> = {</tspan>
+      </text>
+      <text y="74">
+        <tspan fill="#c9d1d9">  </tspan><tspan fill="#9cdcfe">name</tspan><tspan fill="#d4d4d4">:</tspan><tspan fill="#c9d1d9"> </tspan><tspan fill="#ce9178">"ComfyDark"</tspan><tspan fill="#c9d1d9">,</tspan>
+      </text>
+      <text y="96">
+        <tspan fill="#c9d1d9">  </tspan><tspan fill="#9cdcfe">bg</tspan><tspan fill="#d4d4d4">:</tspan><tspan fill="#c9d1d9">      </tspan><tspan fill="#ce9178">"#0d1117"</tspan><tspan fill="#c9d1d9">,</tspan>
+      </text>
+      <text y="118">
+        <tspan fill="#c9d1d9">  </tspan><tspan fill="#9cdcfe">fg</tspan><tspan fill="#d4d4d4">:</tspan><tspan fill="#c9d1d9">      </tspan><tspan fill="#ce9178">"#c9d1d9"</tspan><tspan fill="#c9d1d9">,</tspan>
+      </text>
+      <text y="140">
+        <tspan fill="#c9d1d9">  </tspan><tspan fill="#9cdcfe">accent</tspan><tspan fill="#d4d4d4">:</tspan><tspan fill="#c9d1d9">  </tspan><tspan fill="#ce9178">"#1f6feb"</tspan><tspan fill="#c9d1d9">,</tspan>
+      </text>
+      <text y="162">
+        <tspan fill="#c9d1d9">  </tspan><tspan fill="#9cdcfe">radius</tspan><tspan fill="#d4d4d4">:</tspan><tspan fill="#c9d1d9">  </tspan><tspan fill="#b5cea8">8</tspan><tspan fill="#c9d1d9">,</tspan>
+      </text>
+      <text y="184">
+        <tspan fill="#c9d1d9">}</tspan>
+      </text>
+      <text y="216">
+        <tspan fill="#c586c0">function</tspan><tspan fill="#c9d1d9"> </tspan><tspan fill="#dcdcaa">stylize</tspan><tspan fill="#c9d1d9">(</tspan><tspan fill="#9cdcfe">t</tspan><tspan fill="#d4d4d4">:</tspan><tspan fill="#c9d1d9"> </tspan><tspan fill="#4ec9b0">Token</tspan><tspan fill="#c9d1d9">) {</tspan>
+      </text>
+      <text y="238">
+        <tspan fill="#c9d1d9">  </tspan><tspan fill="#c586c0">return</tspan><tspan fill="#c9d1d9"> </tspan><tspan fill="#9cdcfe">palette</tspan><tspan fill="#d4d4d4">[</tspan><tspan fill="#9cdcfe">t</tspan><tspan fill="#d4d4d4">.</tspan><tspan fill="#9cdcfe">kind</tspan><tspan fill="#d4d4d4">]</tspan>
+      </text>
+      <text y="260">
+        <tspan fill="#c9d1d9">}</tspan>
+      </text>
+    </g>
+
+    <rect x="24" y="236" width="260" height="20" rx="3" fill="#264f78" opacity="0.35"/>
+  </g>
+
+  <g transform="translate(680, 548)">
+    <rect width="460" height="124" rx="12" fill="#161b22" stroke="url(#panelStroke)" stroke-width="1"/>
+    <rect x="0" y="0" width="4" height="124" rx="2" fill="#6a9955" opacity="0.7"/>
+    <g transform="translate(24, 26)">
+      <text class="hx1" fill="#569cd6">Overview</text>
+      <text class="hx2" y="26" fill="#4ec9b0">· Palette</text>
+      <text class="hx3" y="50" fill="#dcdcaa">› Syntax highlights</text>
+      <text class="md"  y="74" fill="#c9d1d9">A <tspan fill="#569cd6" font-weight="700">cozy</tspan> palette with <tspan fill="#ce9178">"warm"</tspan> accents and <tspan fill="#9cdcfe">#comfy</tspan> tags.</text>
+    </g>
+  </g>
+</svg>

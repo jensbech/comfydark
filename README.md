@@ -2,9 +2,7 @@
 
 A unified dark color scheme using the UI colors from [GitHub Dark Default](https://marketplace.visualstudio.com/items?itemName=GitHub.github-vscode-theme) combined with the default VS Code syntax highlighting palette, ported to multiple editors.
 
-## Screenshot
-
-![Screenshot](https://raw.githubusercontent.com/jensbech/ComfyDark/main/vscode/images/screenshot.png)
+![ComfyDark moodboard](moodboard.svg)
 
 ## Apps
 
