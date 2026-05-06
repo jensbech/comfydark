@@ -6,7 +6,7 @@ A unified dark color scheme using the UI colors from [GitHub Dark Default](https
 
 ## Apps
 
-Each app has its own folder at the repo root: [`vscode/`](vscode/), [`zed/`](zed/), [`rider/`](rider/), [`obsidian/`](obsidian/), [`opencode/`](opencode/).
+Each app has its own folder at the repo root: [`vscode/`](vscode/), [`zed/`](zed/), [`rider/`](rider/), [`obsidian/`](obsidian/), [`opencode/`](opencode/), [`pi/`](pi/).
 
 ## Install
 
@@ -54,6 +54,21 @@ Launch opencode and run `/theme` to pick it, or set it permanently in `~/.config
 ```json
 {
   "$schema": "https://opencode.ai/tui.json",
+  "theme": "comfydark"
+}
+```
+
+### Pi
+
+```sh
+mkdir -p ~/.pi/agent/themes
+cp pi/comfydark.json ~/.pi/agent/themes/
+```
+
+Then either pick **comfydark** in `/settings`, or set it in `~/.pi/agent/settings.json`:
+
+```json
+{
   "theme": "comfydark"
 }
 ```
