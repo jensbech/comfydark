@@ -6,7 +6,7 @@ A unified dark color scheme using the UI colors from [GitHub Dark Default](https
 
 ## Apps
 
-Each app has its own folder at the repo root: [`vscode/`](vscode/), [`zed/`](zed/), [`rider/`](rider/), [`obsidian/`](obsidian/), [`opencode/`](opencode/), [`pi/`](pi/).
+Each app has its own folder at the repo root: [`vscode/`](vscode/), [`zed/`](zed/), [`rider/`](rider/), [`obsidian/`](obsidian/), [`opencode/`](opencode/), [`openchamber/`](openchamber/), [`pi/`](pi/).
 
 ## Install
 
@@ -57,6 +57,15 @@ Launch opencode and run `/theme` to pick it, or set it permanently in `~/.config
   "theme": "comfydark"
 }
 ```
+
+### OpenChamber
+
+```sh
+mkdir -p ~/.config/openchamber/themes
+cp openchamber/comfydark.json ~/.config/openchamber/themes/
+```
+
+In OpenChamber: **Settings → Theme → Reload themes**, then pick **ComfyDark**. Hot-reload is supported, no restart needed.
 
 ### Pi
 
