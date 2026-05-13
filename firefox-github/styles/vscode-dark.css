@@ -1,7 +1,7 @@
 /*
  * ComfyDark Theme for GitHub
- * Based on VS Code ComfyDark theme
- * Only overrides syntax colors, not backgrounds
+ * Matches the ComfyDark palette used in the opencode and VS Code themes.
+ * Only overrides syntax colors, not backgrounds.
  */
 
 /* ============================================
@@ -15,144 +15,109 @@ html:not(.vscode-github-syntax-disabled) [data-color-mode="dark"],
 html:not(.vscode-github-syntax-disabled) [data-dark-theme="dark"],
 html:not(.vscode-github-syntax-disabled) [data-color-mode="light"],
 html:not(.vscode-github-syntax-disabled) [data-light-theme="light"] {
-  /* Comments - bright green */
-  --color-prettylights-syntax-comment: #73C991;
-  
-  /* Constants/Types (Dictionary, Input, true, false) - teal/green */
-  --color-prettylights-syntax-constant: #4EC9B0;
-  
-  /* Entity/Functions - bright gold */
-  --color-prettylights-syntax-entity: #FFE566;
-  
-  /* Variables/imports - bright cyan */
-  --color-prettylights-syntax-storage-modifier-import: #A5E0FF;
-  
-  /* HTML/XML tags - blue */
+  --color-prettylights-syntax-comment: #6a9955;
+
+  --color-prettylights-syntax-constant: #4ec9b0;
+  --color-prettylights-syntax-constant-other-reference-link: #ce9178;
+
+  --color-prettylights-syntax-entity: #dcdcaa;
   --color-prettylights-syntax-entity-tag: #569cd6;
-  
-  /* Keywords (public, string, class, if, return) - dark blue */
+
+  --color-prettylights-syntax-storage-modifier-import: #9cdcfe;
+  --color-prettylights-syntax-variable: #9cdcfe;
+
   --color-prettylights-syntax-keyword: #569cd6;
-  
-  /* Strings - bright coral */
-  --color-prettylights-syntax-string: #FFA070;
-  
-  /* Variables - bright cyan */
-  --color-prettylights-syntax-variable: #A5E0FF;
-  
-  /* Errors - vivid red */
-  --color-prettylights-syntax-brackethighlighter-unmatched: #FF6B6B;
-  --color-prettylights-syntax-invalid-illegal-text: #FF6B6B;
-  --color-prettylights-syntax-carriage-return-text: #FF6B6B;
-  
-  /* Regex - bright red */
-  --color-prettylights-syntax-string-regexp: #FF7B7B;
-  
-  /* Markup */
-  --color-prettylights-syntax-markup-list: #7AA2F7;
+
+  --color-prettylights-syntax-string: #ce9178;
+  --color-prettylights-syntax-string-regexp: #d16969;
+
+  --color-prettylights-syntax-brackethighlighter-unmatched: #f44747;
+  --color-prettylights-syntax-invalid-illegal-text: #f44747;
+  --color-prettylights-syntax-carriage-return-text: #f44747;
+
+  --color-prettylights-syntax-markup-list: #569cd6;
   --color-prettylights-syntax-markup-heading: #569cd6;
-  --color-prettylights-syntax-markup-italic: #E0E0E0;
+  --color-prettylights-syntax-markup-italic: #d4d4d4;
   --color-prettylights-syntax-markup-bold: #569cd6;
-  --color-prettylights-syntax-markup-deleted-text: #FFA070;
-  --color-prettylights-syntax-markup-inserted-text: #A9DC76;
+  --color-prettylights-syntax-markup-deleted-text: #ce9178;
+  --color-prettylights-syntax-markup-inserted-text: #b5cea8;
   --color-prettylights-syntax-markup-changed-text: #569cd6;
-  --color-prettylights-syntax-markup-ignored-text: #9CA3AF;
-  --color-prettylights-syntax-meta-diff-range: #C586C0;
-  --color-prettylights-syntax-brackethighlighter-angle: #A0A0A0;
-  --color-prettylights-syntax-sublimelinter-gutter-mark: #9CA3AF;
-  --color-prettylights-syntax-constant-other-reference-link: #FFA070;
+  --color-prettylights-syntax-markup-ignored-text: #8b949e;
+  --color-prettylights-syntax-meta-diff-range: #c586c0;
+  --color-prettylights-syntax-brackethighlighter-angle: #808080;
+  --color-prettylights-syntax-sublimelinter-gutter-mark: #8b949e;
 }
 
 /* ============================================
    DIRECT CLASS OVERRIDES
    ============================================ */
 
-/* Comments - Bright Green */
 html:not(.vscode-github-syntax-disabled) .pl-c {
-  color: #73C991 !important;
+  color: #6a9955 !important;
   font-style: italic;
 }
 
-/* Constants/Types (Dictionary, Input, StorageAccountArgs, true, false) - Teal/Green */
 html:not(.vscode-github-syntax-disabled) .pl-c1 {
-  color: #4EC9B0 !important;
+  color: #4ec9b0 !important;
 }
 
-/* Entity, Function names - Bright Gold */
 html:not(.vscode-github-syntax-disabled) .pl-e,
 html:not(.vscode-github-syntax-disabled) .pl-en {
-  color: #FFE566 !important;
+  color: #dcdcaa !important;
 }
 
-/* Variables, Parameters - Bright Cyan */
 html:not(.vscode-github-syntax-disabled) .pl-smi,
 html:not(.vscode-github-syntax-disabled) .pl-s .pl-s1,
 html:not(.vscode-github-syntax-disabled) .pl-v,
 html:not(.vscode-github-syntax-disabled) .pl-smw {
-  color: #A5E0FF !important;
+  color: #9cdcfe !important;
 }
 
-/* Tags (HTML/XML) - Blue */
 html:not(.vscode-github-syntax-disabled) .pl-ent {
   color: #569cd6 !important;
 }
 
-/* Keywords (public, required, string, get, set, class, if, return) - Dark Blue */
 html:not(.vscode-github-syntax-disabled) .pl-k {
   color: #569cd6 !important;
 }
 
-/* Strings - Bright Coral/Orange */
 html:not(.vscode-github-syntax-disabled) .pl-s,
 html:not(.vscode-github-syntax-disabled) .pl-pds {
-  color: #FFA070 !important;
+  color: #ce9178 !important;
 }
 
-/* String interpolation parts */
 html:not(.vscode-github-syntax-disabled) .pl-s .pl-pse .pl-s1 {
-  color: #FFA070 !important;
+  color: #ce9178 !important;
 }
 
-/* String variable - bright cyan */
 html:not(.vscode-github-syntax-disabled) .pl-s .pl-v {
-  color: #A5E0FF !important;
+  color: #9cdcfe !important;
 }
 
-/* Regex - Bright Red */
 html:not(.vscode-github-syntax-disabled) .pl-sr {
-  color: #FF7B7B !important;
+  color: #d16969 !important;
 }
 
-/* Regex escape characters - Bright Yellow */
 html:not(.vscode-github-syntax-disabled) .pl-sr .pl-cce {
-  color: #FFDA6A !important;
+  color: #d7ba7d !important;
   font-weight: bold;
 }
 
-/* Regex character class */
 html:not(.vscode-github-syntax-disabled) .pl-sr .pl-sre,
 html:not(.vscode-github-syntax-disabled) .pl-sr .pl-sra {
-  color: #FF7B7B !important;
+  color: #d16969 !important;
 }
 
-/* Errors, Invalid - Vivid Red */
-html:not(.vscode-github-syntax-disabled) .pl-bu {
-  color: #FF6B6B !important;
-}
-
-html:not(.vscode-github-syntax-disabled) .pl-ii {
-  color: #FF6B6B !important;
-}
-
+html:not(.vscode-github-syntax-disabled) .pl-bu,
+html:not(.vscode-github-syntax-disabled) .pl-ii,
 html:not(.vscode-github-syntax-disabled) .pl-c2 {
-  color: #FF6B6B !important;
+  color: #f44747 !important;
 }
 
-/* Markup list - Bright Blue */
 html:not(.vscode-github-syntax-disabled) .pl-ml {
-  color: #7AA2F7 !important;
+  color: #569cd6 !important;
 }
 
-/* Markup headings - Blue, bold */
 html:not(.vscode-github-syntax-disabled) .pl-mh,
 html:not(.vscode-github-syntax-disabled) .pl-mh .pl-en,
 html:not(.vscode-github-syntax-disabled) .pl-ms {
@@ -160,66 +125,54 @@ html:not(.vscode-github-syntax-disabled) .pl-ms {
   color: #569cd6 !important;
 }
 
-/* Markup italic */
 html:not(.vscode-github-syntax-disabled) .pl-mi {
   font-style: italic;
-  color: #E0E0E0 !important;
+  color: #d4d4d4 !important;
 }
 
-/* Markup bold */
 html:not(.vscode-github-syntax-disabled) .pl-mb {
   font-weight: bold;
   color: #569cd6 !important;
 }
 
-/* Markup deleted - Bright Coral */
 html:not(.vscode-github-syntax-disabled) .pl-md {
-  color: #FFA070 !important;
+  color: #ce9178 !important;
 }
 
-/* Markup inserted - Bright Green */
 html:not(.vscode-github-syntax-disabled) .pl-mi1 {
-  color: #A9DC76 !important;
+  color: #b5cea8 !important;
 }
 
-/* Markup changed - Blue */
 html:not(.vscode-github-syntax-disabled) .pl-mc {
   color: #569cd6 !important;
 }
 
-/* Markup ignored */
 html:not(.vscode-github-syntax-disabled) .pl-mi2 {
-  color: #9CA3AF !important;
+  color: #8b949e !important;
 }
 
-/* Diff range - Purple */
 html:not(.vscode-github-syntax-disabled) .pl-mdr {
   font-weight: bold;
-  color: #C586C0 !important;
+  color: #c586c0 !important;
 }
 
-/* Brackets - Lighter Gray */
 html:not(.vscode-github-syntax-disabled) .pl-ba {
-  color: #A0A0A0 !important;
+  color: #808080 !important;
 }
 
-/* Gutter marks */
 html:not(.vscode-github-syntax-disabled) .pl-sg {
-  color: #9CA3AF !important;
+  color: #8b949e !important;
 }
 
-/* Links in code - Bright Coral */
 html:not(.vscode-github-syntax-disabled) .pl-corl {
   text-decoration: underline;
-  color: #FFA070 !important;
+  color: #ce9178 !important;
 }
 
-/* HTML/XML attribute names - Bright Cyan */
 html:not(.vscode-github-syntax-disabled) .pl-e.pl-e {
-  color: #A5E0FF !important;
+  color: #9cdcfe !important;
 }
 
-/* CSS selectors - Bright Yellow */
 html:not(.vscode-github-syntax-disabled) .pl-ent.pl-ent {
-  color: #FFDA6A !important;
+  color: #d7ba7d !important;
 }

@@ -6,7 +6,7 @@ A unified dark color scheme using the UI colors from [GitHub Dark Default](https
 
 ## Apps
 
-Each app has its own folder at the repo root: [`vscode/`](vscode/), [`zed/`](zed/), [`rider/`](rider/), [`obsidian/`](obsidian/), [`opencode/`](opencode/), [`openchamber/`](openchamber/), [`pi/`](pi/).
+Each app has its own folder at the repo root: [`vscode/`](vscode/), [`zed/`](zed/), [`rider/`](rider/), [`obsidian/`](obsidian/), [`opencode/`](opencode/), [`openchamber/`](openchamber/), [`pi/`](pi/), [`firefox-github/`](firefox-github/).
 
 ## Install
 
@@ -80,6 +80,23 @@ Then either pick **comfydark** in `/settings`, or set it in `~/.pi/agent/setting
 {
   "theme": "comfydark"
 }
+```
+
+### Firefox (GitHub)
+
+A Firefox extension that applies VS Code Dark+ syntax highlighting to code on github.com and gist.github.com.
+
+Load it as a temporary add-on:
+
+1. Open `about:debugging#/runtime/this-firefox` in Firefox.
+2. Click **Load Temporary Add-on…**.
+3. Select `firefox-github/manifest.json`.
+
+The extension stays active until Firefox is restarted. To install it permanently, package and sign it via [addons.mozilla.org](https://addons.mozilla.org/developers/):
+
+```sh
+cd firefox-github
+zip -r ../comfydark-firefox-github.zip . -x "README.md"
 ```
 
 ### Rider (JetBrains)
