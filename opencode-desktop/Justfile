@@ -1,0 +1,131 @@
+_default:
+	@just --list
+
+PROXY_LABEL := "opencode-proxy"
+PROXY_PLIST := env_var('HOME') + "/Library/LaunchAgents/opencode-proxy.plist"
+PROXY_PORT  := env_var_or_default("PORT", "1234")
+UPSTREAM_HOST := env_var_or_default("UPSTREAM_HOST", "127.0.0.1")
+UPSTREAM_PORT := env_var_or_default("UPSTREAM_PORT", "4096")
+BUNDLE_ID := env_var_or_default("BUNDLE_ID", "dev.jens.comfydark.opencode")
+INSTALL_DIR := env_var_or_default("INSTALL_DIR", env_var('HOME') + "/Applications")
+APP_PATH := INSTALL_DIR + "/Comfydark.app"
+
+# Check required dependencies, upstream reachability, and current install state
+doctor:
+	#!/usr/bin/env bash
+	set -u
+	ok=0; warn=0; err=0
+	check() {
+	  local label="$1" cmd="$2" hint="${3:-}"
+	  if eval "$cmd" >/dev/null 2>&1; then
+	    printf "  ✓ %s\n" "$label"; ok=$((ok+1))
+	  else
+	    printf "  ✗ %s" "$label"
+	    [ -n "$hint" ] && printf "  — %s" "$hint"
+	    printf "\n"
+	    err=$((err+1))
+	  fi
+	}
+	warn() {
+	  local label="$1" cmd="$2" hint="${3:-}"
+	  if eval "$cmd" >/dev/null 2>&1; then
+	    printf "  ✓ %s\n" "$label"; ok=$((ok+1))
+	  else
+	    printf "  ! %s" "$label"
+	    [ -n "$hint" ] && printf "  — %s" "$hint"
+	    printf "\n"
+	    warn=$((warn+1))
+	  fi
+	}
+	echo "Required for proxy:"
+	check "bun"      "command -v bun"           "install with 'curl -fsSL https://bun.sh/install | bash'"
+	echo "Required for mac-app:"
+	check "swiftc"   "command -v swiftc"        "install Xcode CLT: 'xcode-select --install'"
+	check "iconutil" "command -v iconutil"      "ships with Xcode CLT"
+	check "sips"     "command -v sips"          "ships with macOS"
+	echo "Optional but recommended:"
+	warn "upstream opencode reachable on {{UPSTREAM_HOST}}:{{UPSTREAM_PORT}}" \
+	     "curl -fsS --max-time 2 -o /dev/null http://{{UPSTREAM_HOST}}:{{UPSTREAM_PORT}}/doc" \
+	     "start your opencode service first; the proxy will run anyway but can't serve until then"
+	echo
+	echo "Current state:"
+	if launchctl list 2>/dev/null | awk '{print $3}' | grep -qx "{{PROXY_LABEL}}"; then
+	  pid=$(launchctl list 2>/dev/null | awk '$3=="{{PROXY_LABEL}}"{print $1}')
+	  echo "  proxy LaunchAgent: loaded (pid=${pid:-?})"
+	else
+	  echo "  proxy LaunchAgent: not loaded"
+	fi
+	if [ -d "{{APP_PATH}}" ]; then
+	  echo "  mac-app installed:  {{APP_PATH}}"
+	else
+	  echo "  mac-app installed:  no"
+	fi
+	echo
+	if [ "$err" -gt 0 ]; then
+	  echo "$err required dep(s) missing." >&2; exit 1
+	fi
+	if [ "$warn" -gt 0 ]; then
+	  echo "$warn warning(s) — review above."
+	fi
+	echo "All required deps present."
+
+# One-shot bootstrap: doctor + install-proxy + install-app
+setup: doctor install-proxy install-app
+	@echo
+	@echo "Done. Launch the app:"
+	@echo "  open '{{APP_PATH}}'"
+
+# Install the reverse-proxy LaunchAgent (auto-starts at login)
+install-proxy:
+	@./install.sh
+
+# Build mac-app and copy Comfydark.app into ~/Applications
+install-app:
+	@cd mac-app && BUNDLE_ID='{{BUNDLE_ID}}' INSTALL_DIR='{{INSTALL_DIR}}' ./build.sh --install
+
+# Build mac-app into mac-app/dist without installing
+build-app:
+	@cd mac-app && BUNDLE_ID='{{BUNDLE_ID}}' ./build.sh
+
+# Restart the proxy LaunchAgent (picks up proxy.ts changes)
+restart:
+	@launchctl kickstart -k "gui/$(id -u)/{{PROXY_LABEL}}" && echo "proxy restarted"
+
+# Tail proxy stdout + stderr logs
+logs:
+	@tail -n 50 -F "$HOME/Library/Logs/{{PROXY_LABEL}}.out.log" "$HOME/Library/Logs/{{PROXY_LABEL}}.err.log"
+
+# Show LaunchAgent state, listening sockets, upstream, and served theme
+status:
+	#!/usr/bin/env bash
+	echo "LaunchAgent:"
+	launchctl list 2>/dev/null | awk 'NR==1 || $3=="{{PROXY_LABEL}}"'
+	echo
+	echo "Listening:"
+	lsof -iTCP:{{PROXY_PORT}} -sTCP:LISTEN -n -P 2>/dev/null || echo "  nothing on {{PROXY_PORT}}"
+	echo
+	echo "Upstream:"
+	if curl -fsS --max-time 2 -o /dev/null http://{{UPSTREAM_HOST}}:{{UPSTREAM_PORT}}/doc; then
+	  echo "  {{UPSTREAM_HOST}}:{{UPSTREAM_PORT}} reachable"
+	else
+	  echo "  {{UPSTREAM_HOST}}:{{UPSTREAM_PORT}} NOT reachable"
+	fi
+	echo
+	echo "Theme served:"
+	curl -fsS --max-time 2 "http://127.0.0.1:{{PROXY_PORT}}/assets/amoled-CTKLNjMY.js" 2>/dev/null \
+	  | head -c 200 || echo "  (proxy not serving)"
+	echo
+
+# Launch the installed Comfydark.app
+open:
+	@open '{{APP_PATH}}'
+
+# Remove proxy LaunchAgent and the installed Comfydark.app
+uninstall:
+	@./uninstall.sh
+	@rm -rf '{{APP_PATH}}' && echo "Removed {{APP_PATH}}" || true
+	@rm -rf mac-app/dist && echo "Removed mac-app/dist"
+
+# Remove mac-app/dist build output
+clean:
+	@rm -rf mac-app/dist && echo "Cleaned mac-app/dist"

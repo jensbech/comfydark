@@ -4,7 +4,7 @@
   "id": "amoled",
   "dark": {
     "palette": {
-      "neutral":    "#0a0c10",
+      "neutral":    "#0d1117",
       "ink":        "#e6edf3",
       "primary":    "#58a6ff",
       "accent":     "#79c0ff",
@@ -16,6 +16,9 @@
       "diffDelete": "#ff6b6b"
     },
     "overrides": {
+      "background-base":    "#161b22",
+      "background-strong":  "#1c222b",
+      "background-weak":    "#0d1117",
       "text-base":          "#e6edf3",
       "text-strong":        "#ffffff",
       "text-weak":          "#9aa6b2",
@@ -42,7 +45,7 @@
   },
   "light": {
     "palette": {
-      "neutral":    "#0a0c10",
+      "neutral":    "#0d1117",
       "ink":        "#e6edf3",
       "primary":    "#58a6ff",
       "accent":     "#79c0ff",
@@ -54,6 +57,9 @@
       "diffDelete": "#ff6b6b"
     },
     "overrides": {
+      "background-base":    "#161b22",
+      "background-strong":  "#1c222b",
+      "background-weak":    "#0d1117",
       "text-base":          "#e6edf3",
       "text-strong":        "#ffffff",
       "text-weak":          "#9aa6b2",
