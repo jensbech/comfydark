@@ -17,22 +17,42 @@ is hard-coded in the main bundle; only the colors change.
 | `comfydark.json` | Theme palette + override map, in opencode's `desktop-theme.json` schema. Edit this to retune colors. |
 | `proxy.ts` | Bun reverse proxy. Forwards everything to the upstream opencode server except `/assets/<override-id>-*.js`, which is replaced with `comfydark.json` wrapped as an ES module. |
 | `install.sh` | Writes a launchd LaunchAgent at `~/Library/LaunchAgents/opencode-proxy.plist` and starts it. The agent auto-starts on login and respawns on crash. |
-| `uninstall.sh` | Unloads and removes the LaunchAgent. |
+| `uninstall.sh` | Unloads and removes the proxy LaunchAgent. |
+| `install-server.sh` | Writes a launchd LaunchAgent at `~/Library/LaunchAgents/opencode-server.plist` that runs `opencode serve` on `UPSTREAM_HOST:UPSTREAM_PORT`. Auto-starts on login and respawns on crash. |
+| `uninstall-server.sh` | Unloads and removes the server LaunchAgent. |
 
 ## Requirements
 
 - **macOS** (the installer uses `launchd`).
 - **[Bun](https://bun.sh)** on `$PATH` — the proxy runs as a single Bun process.
-- A running upstream `opencode serve` instance (default `127.0.0.1:4096`).
+- **[opencode](https://opencode.ai)** on `$PATH` if you want this folder to also
+  manage the upstream `opencode serve` service. If you already run opencode as
+  a service yourself, skip `install-server.sh` and just run `install.sh`.
 
-If you don't already have opencode running as a service, the simplest version
-is a separate LaunchAgent that runs `opencode serve --hostname 127.0.0.1 --port 4096`.
-The proxy doesn't manage that — keep them independent.
+The proxy and the opencode server are installed as two independent
+LaunchAgents (`opencode-server` and `opencode-proxy`) so either one can be
+restarted, replaced, or removed without touching the other.
 
 ## Install
 
+The fastest path is the all-in-one [just](https://github.com/casey/just)
+recipe — it runs `doctor`, installs the `opencode-server` LaunchAgent, the
+`opencode-proxy` LaunchAgent, and builds + installs `Comfydark.app`:
+
 ```sh
-./install.sh
+just setup       # or:  just install   (alias)
+```
+
+It's **idempotent** — re-running tears down each LaunchAgent and the previous
+`Comfydark.app` before reinstalling, so you can safely use it as both an
+installer and an updater.
+
+If you'd rather wire pieces up manually (e.g. you already run `opencode serve`
+yourself and don't want a second copy):
+
+```sh
+./install-server.sh   # opencode serve LaunchAgent — skip if you manage it yourself
+./install.sh          # theme proxy LaunchAgent
 ```
 
 That:
@@ -84,11 +104,13 @@ You may also need to switch to a different theme in the picker and back
 ## Uninstall
 
 ```sh
-./uninstall.sh
+./uninstall.sh          # remove proxy LaunchAgent
+./uninstall-server.sh   # remove opencode server LaunchAgent (skip if you manage it yourself)
 ```
 
-Removes the plist and stops the agent. Nothing else to clean up — this folder
-is the only state.
+Or `just uninstall` to tear down both LaunchAgents and the installed
+`Comfydark.app` in one shot. Nothing else to clean up — this folder is the
+only state.
 
 ## How it works (notes for future tinkering)
 

@@ -4,6 +4,8 @@ _default:
 PROXY_LABEL := "opencode-proxy"
 PROXY_PLIST := env_var('HOME') + "/Library/LaunchAgents/opencode-proxy.plist"
 PROXY_PORT  := env_var_or_default("PORT", "1234")
+SERVER_LABEL := "opencode-server"
+SERVER_PLIST := env_var('HOME') + "/Library/LaunchAgents/opencode-server.plist"
 UPSTREAM_HOST := env_var_or_default("UPSTREAM_HOST", "127.0.0.1")
 UPSTREAM_PORT := env_var_or_default("UPSTREAM_PORT", "4096")
 BUNDLE_ID := env_var_or_default("BUNDLE_ID", "dev.jens.comfydark.opencode")
@@ -39,6 +41,8 @@ doctor:
 	}
 	echo "Required for proxy:"
 	check "bun"      "command -v bun"           "install with 'curl -fsSL https://bun.sh/install | bash'"
+	echo "Required for opencode server:"
+	check "opencode" "command -v opencode"      "install from https://opencode.ai or 'brew install sst/tap/opencode'"
 	echo "Required for mac-app:"
 	check "swiftc"   "command -v swiftc"        "install Xcode CLT: 'xcode-select --install'"
 	check "iconutil" "command -v iconutil"      "ships with Xcode CLT"
@@ -49,11 +53,17 @@ doctor:
 	     "start your opencode service first; the proxy will run anyway but can't serve until then"
 	echo
 	echo "Current state:"
+	if launchctl list 2>/dev/null | awk '{print $3}' | grep -qx "{{SERVER_LABEL}}"; then
+	  pid=$(launchctl list 2>/dev/null | awk '$3=="{{SERVER_LABEL}}"{print $1}')
+	  echo "  server LaunchAgent: loaded (pid=${pid:-?})"
+	else
+	  echo "  server LaunchAgent: not loaded"
+	fi
 	if launchctl list 2>/dev/null | awk '{print $3}' | grep -qx "{{PROXY_LABEL}}"; then
 	  pid=$(launchctl list 2>/dev/null | awk '$3=="{{PROXY_LABEL}}"{print $1}')
-	  echo "  proxy LaunchAgent: loaded (pid=${pid:-?})"
+	  echo "  proxy LaunchAgent:  loaded (pid=${pid:-?})"
 	else
-	  echo "  proxy LaunchAgent: not loaded"
+	  echo "  proxy LaunchAgent:  not loaded"
 	fi
 	if [ -d "{{APP_PATH}}" ]; then
 	  echo "  mac-app installed:  {{APP_PATH}}"
@@ -69,11 +79,18 @@ doctor:
 	fi
 	echo "All required deps present."
 
-# One-shot bootstrap: doctor + install-proxy + install-app
-setup: doctor install-proxy install-app
+# One-shot idempotent bootstrap (doctor + server + proxy + app); safe to re-run
+setup: doctor install-server install-proxy install-app
 	@echo
 	@echo "Done. Launch the app:"
 	@echo "  open '{{APP_PATH}}'"
+
+# Alias for `setup`
+install: setup
+
+# Install the opencode serve LaunchAgent (auto-starts at login)
+install-server:
+	@./install-server.sh
 
 # Install the reverse-proxy LaunchAgent (auto-starts at login)
 install-proxy:
@@ -91,15 +108,23 @@ build-app:
 restart:
 	@launchctl kickstart -k "gui/$(id -u)/{{PROXY_LABEL}}" && echo "proxy restarted"
 
+# Restart the opencode server LaunchAgent
+restart-server:
+	@launchctl kickstart -k "gui/$(id -u)/{{SERVER_LABEL}}" && echo "server restarted"
+
 # Tail proxy stdout + stderr logs
 logs:
 	@tail -n 50 -F "$HOME/Library/Logs/{{PROXY_LABEL}}.out.log" "$HOME/Library/Logs/{{PROXY_LABEL}}.err.log"
 
+# Tail opencode server stdout + stderr logs
+logs-server:
+	@tail -n 50 -F "$HOME/Library/Logs/{{SERVER_LABEL}}.out.log" "$HOME/Library/Logs/{{SERVER_LABEL}}.err.log"
+
 # Show LaunchAgent state, listening sockets, upstream, and served theme
 status:
 	#!/usr/bin/env bash
-	echo "LaunchAgent:"
-	launchctl list 2>/dev/null | awk 'NR==1 || $3=="{{PROXY_LABEL}}"'
+	echo "LaunchAgents:"
+	launchctl list 2>/dev/null | awk 'NR==1 || $3=="{{SERVER_LABEL}}" || $3=="{{PROXY_LABEL}}"'
 	echo
 	echo "Listening:"
 	lsof -iTCP:{{PROXY_PORT}} -sTCP:LISTEN -n -P 2>/dev/null || echo "  nothing on {{PROXY_PORT}}"
@@ -120,9 +145,18 @@ status:
 open:
 	@open '{{APP_PATH}}'
 
-# Remove proxy LaunchAgent and the installed Comfydark.app
+# Remove the opencode server LaunchAgent
+uninstall-server:
+	@./uninstall-server.sh
+
+# Remove the proxy LaunchAgent
+uninstall-proxy:
+	@./uninstall.sh
+
+# Remove both LaunchAgents and the installed Comfydark.app
 uninstall:
 	@./uninstall.sh
+	@./uninstall-server.sh
 	@rm -rf '{{APP_PATH}}' && echo "Removed {{APP_PATH}}" || true
 	@rm -rf mac-app/dist && echo "Removed mac-app/dist"
 
