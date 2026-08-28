@@ -6,7 +6,7 @@ A unified dark color scheme using the UI colors from [GitHub Dark Default](https
 
 ## Apps
 
-Each app has its own folder at the repo root: [`vscode/`](vscode/), [`zed/`](zed/), [`rider/`](rider/), [`obsidian/`](obsidian/), [`opencode/`](opencode/), [`openchamber/`](openchamber/), [`pi/`](pi/), [`firefox-github/`](firefox-github/).
+Each app has its own folder at the repo root: [`vscode/`](vscode/), [`zed/`](zed/), [`rider/`](rider/), [`obsidian/`](obsidian/), [`opencode/`](opencode/), [`openchamber/`](openchamber/), [`pi/`](pi/), [`t3code/`](t3code/), [`firefox-github/`](firefox-github/), [`firefox-theme/`](firefox-theme/).
 
 ## Install
 
@@ -82,6 +82,12 @@ Then either pick **comfydark** in `/settings`, or set it in `~/.pi/agent/setting
 }
 ```
 
+### T3 Code
+
+Open **Settings → Appearance → Theme library** and drag `t3code/comfydark.json` into the import dialog (or use the theme editor, `cmd+alt+shift+t`), then activate **ComfyDark** as the dark half.
+
+T3 Code's theme format only covers UI colors, so syntax highlighting inside code blocks keeps T3 Code's own palette.
+
 ### Firefox (GitHub)
 
 A Firefox extension that applies VS Code Dark+ syntax highlighting to code on github.com and gist.github.com.
@@ -98,6 +104,12 @@ The extension stays active until Firefox is restarted. To install it permanently
 cd firefox-github
 zip -r ../comfydark-firefox-github.zip . -x "README.md"
 ```
+
+### Firefox (browser theme)
+
+A static theme that applies the ComfyDark palette to the Firefox UI itself — tabs, toolbars, URL bar, menus, sidebar, and the new tab page. See [`firefox-theme/README.md`](firefox-theme/README.md) for the color mapping.
+
+In Firefox Developer Edition, set `xpinstall.signatures.required` to `false` in `about:config`, then install `firefox-theme/comfydark.xpi` via **about:addons → gear icon → Install Add-on From File…**. In other Firefox editions, load `firefox-theme/manifest.json` as a temporary add-on from `about:debugging#/runtime/this-firefox`.
 
 ### Rider (JetBrains)
 

@@ -1,0 +1,57 @@
+{
+  "manifest_version": 2,
+  "name": "ComfyDark",
+  "version": "1.0.0",
+  "description": "ComfyDark theme for the Firefox UI, based on GitHub Dark Default colors",
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "comfydark-theme@jensbech",
+      "strict_min_version": "100.0"
+    }
+  },
+  "theme": {
+    "properties": {
+      "color_scheme": "dark",
+      "content_color_scheme": "dark"
+    },
+    "colors": {
+      "frame": "#0d1117",
+      "frame_inactive": "#0d1117",
+      "toolbar": "#161b22",
+      "toolbar_text": "#c9d1d9",
+      "bookmark_text": "#c9d1d9",
+      "tab_background_text": "#8b949e",
+      "tab_text": "#c9d1d9",
+      "tab_selected": "#161b22",
+      "tab_line": "#1f6feb",
+      "tab_loading": "#1f6feb",
+      "toolbar_field": "#0d1117",
+      "toolbar_field_text": "#c9d1d9",
+      "toolbar_field_border": "#30363d",
+      "toolbar_field_focus": "#0d1117",
+      "toolbar_field_text_focus": "#c9d1d9",
+      "toolbar_field_border_focus": "#1f6feb",
+      "toolbar_field_highlight": "#264f78",
+      "toolbar_field_highlight_text": "#ffffff",
+      "toolbar_top_separator": "#30363d",
+      "toolbar_bottom_separator": "#30363d",
+      "toolbar_vertical_separator": "#30363d",
+      "icons": "#c9d1d9",
+      "icons_attention": "#388bfd",
+      "button_background_hover": "#30363d",
+      "button_background_active": "#264f78",
+      "popup": "#161b22",
+      "popup_text": "#c9d1d9",
+      "popup_border": "#30363d",
+      "popup_highlight": "#1f6feb",
+      "popup_highlight_text": "#ffffff",
+      "sidebar": "#0d1117",
+      "sidebar_text": "#c9d1d9",
+      "sidebar_border": "#30363d",
+      "sidebar_highlight": "#1f6feb",
+      "sidebar_highlight_text": "#ffffff",
+      "ntp_background": "#0d1117",
+      "ntp_text": "#c9d1d9"
+    }
+  }
+}
