@@ -74,7 +74,17 @@ def terrain(phase, relief):
     h += 0.125 * np.sin(2 * np.pi * (u * 1.35 - v * 1.05 + phase * 1.4 + 0.3)).astype(np.float32)
     h += 0.050 * np.sin(2 * np.pi * (u * 2.40 + v * 2.00 + phase * 0.7 + 0.8)).astype(np.float32)
     h += 0.018 * np.sin(2 * np.pi * (u * 4.10 - v * 3.50 + phase * 1.9 + 0.5)).astype(np.float32)
-    return h
+
+    gy, gx = np.gradient(h)
+    sl = np.sqrt(gx * gx + gy * gy)
+    del gx, gy
+    sl = np.clip(sl / max(sl.max(), 1e-9) * 3.2, 0, 1).astype(np.float32)
+    fine = (
+        0.020 * np.sin(2 * np.pi * (u * 6.5 - v * 5.1 + phase * 2.3))
+        + 0.011 * np.sin(2 * np.pi * (u * 10.3 + v * 8.7 + phase * 1.1 + 0.4))
+        + 0.006 * np.sin(2 * np.pi * (u * 17.1 - v * 14.3 + phase * 3.1 + 0.9))
+    ).astype(np.float32)
+    return h + fine * sl
 
 
 def notch_calm():
