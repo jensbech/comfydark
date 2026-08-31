@@ -5,25 +5,32 @@ from PIL import Image
 
 OUT_DIR = Path(__file__).resolve().parent
 W, H = 5120, 2880
+ASPECT = W / H
+
+LEVELS = 30
+INDEX_EVERY = 5
+LINE_PX = 2.6
+INDEX_PX = 5.2
 
 
 def hex_to_rgb(h):
     h = h.lstrip("#")
-    return np.array([int(h[i : i + 2], 16) for i in (0, 2, 4)], dtype=np.float64) / 255.0
+    return np.array([int(h[i : i + 2], 16) for i in (0, 2, 4)], dtype=np.float32) / 255.0
 
 
+SELECTION = hex_to_rgb("#264f78")
 ACCENT = hex_to_rgb("#1f6feb")
 ACCENT_HOVER = hex_to_rgb("#388bfd")
-SELECTION = hex_to_rgb("#264f78")
 TYPE = hex_to_rgb("#4ec9b0")
 VARIABLE = hex_to_rgb("#9cdcfe")
 CONSTANT = hex_to_rgb("#4fc1ff")
 FUNCTION = hex_to_rgb("#dcdcaa")
 KEYWORD = hex_to_rgb("#c586c0")
 
-yy, xx = np.mgrid[0:H, 0:W].astype(np.float64)
+yy, xx = np.mgrid[0:H, 0:W].astype(np.float32)
 u = xx / W
 v = yy / H
+del xx, yy
 
 
 def srgb_to_lin(c):
@@ -34,79 +41,105 @@ def lin_to_srgb(c):
     return np.where(c <= 0.0031308, c * 12.92, 1.055 * np.clip(c, 0, None) ** (1 / 2.4) - 0.055)
 
 
-def ribbon(vv, path_v, sigma, color, strength, taper=None, sharp=2):
-    fall = np.exp(-(np.abs((vv - path_v) / sigma) ** sharp))
-    if taper is not None:
-        fall = fall * taper
-    return fall[..., None] * srgb_to_lin(color)[None, None, :] * strength
+RAMP = [
+    (0.00, SELECTION),
+    (0.20, ACCENT),
+    (0.40, ACCENT_HOVER),
+    (0.58, TYPE),
+    (0.74, CONSTANT),
+    (0.88, VARIABLE),
+    (1.00, FUNCTION),
+]
+
+
+def ramp(t):
+    ps = np.array([p for p, _ in RAMP], dtype=np.float64)
+    cols = np.array([srgb_to_lin(c) for _, c in RAMP], dtype=np.float64)
+    flat = t.ravel()
+    out = np.empty((flat.size, 3), dtype=np.float32)
+    for k in range(3):
+        out[:, k] = np.interp(flat, ps, cols[:, k]).astype(np.float32)
+    return out.reshape(t.shape + (3,))
+
+
+def bump(cx, cy, rx, ry):
+    return np.exp(-((((u - cx) / rx) ** 2 + ((v - cy) / ry) ** 2))).astype(np.float32)
+
+
+def terrain(phase, relief):
+    h = np.zeros((H, W), dtype=np.float32)
+    for cx, cy, rx, ry, amp in relief:
+        h += np.float32(amp) * bump(cx, cy, rx, ry)
+    h += 0.26 * np.sin(2 * np.pi * (u * 0.80 + v * 0.52 + phase)).astype(np.float32)
+    h += 0.125 * np.sin(2 * np.pi * (u * 1.35 - v * 1.05 + phase * 1.4 + 0.3)).astype(np.float32)
+    h += 0.050 * np.sin(2 * np.pi * (u * 2.40 + v * 2.00 + phase * 0.7 + 0.8)).astype(np.float32)
+    h += 0.018 * np.sin(2 * np.pi * (u * 4.10 - v * 3.50 + phase * 1.9 + 0.5)).astype(np.float32)
+    return h
+
+
+def notch_calm():
+    return np.exp(-((((u - 0.5) / 0.36) ** 2 + (v / 0.26) ** 2) ** 1.4)).astype(np.float32)
 
 
 def notch_pool():
     d = np.sqrt(((u - 0.5) / 0.165) ** 2 + (v / 0.068) ** 2)
-    m = np.clip((2.6 - d) / (2.6 - 1.0), 0, 1)
-    return m * m * (3 - 2 * m)
+    m = np.clip((2.6 - d) / 1.6, 0, 1)
+    return (m * m * (3 - 2 * m)).astype(np.float32)
 
 
-def render(name, phase):
-    img = np.zeros((H, W, 3), dtype=np.float64)
+def render(name, phase, relief):
+    h = terrain(phase, relief)
+    h -= h.min()
+    h /= max(h.max(), 1e-6)
 
-    dip = np.exp(-(((u - 0.46) / 0.30) ** 2))
-    sides = np.clip((np.abs(u - 0.5) - 0.14) / 0.24, 0, 1)
-    sides = sides * sides * (3 - 2 * sides)
+    elev = h.copy()
+    h = h * (1.0 - notch_calm())
 
-    c1 = 0.045 + 0.27 * dip + 0.072 * np.sin(2 * np.pi * (u * 0.50 + phase))
-    taper1 = 1.0 + 0.85 * sides
-    img = img + ribbon(v, c1 + 0.02, 0.062, ACCENT, 0.050, taper1, sharp=4)
-    img = img + ribbon(v, c1, 0.030, ACCENT, 0.155, taper1, sharp=5)
-    img = img + ribbon(v, c1 + 0.035, 0.007, VARIABLE, 0.072, taper1, sharp=4)
-    img = img + ribbon(v, c1 - 0.042, 0.006, TYPE, 0.050, taper1, sharp=4)
+    f = h * np.float32(LEVELS) + np.float32(0.5)
+    gy, gx = np.gradient(f)
+    grad = np.sqrt(gx * gx + gy * gy)
+    del gx, gy
+    np.maximum(grad, np.float32(1e-6), out=grad)
 
-    c2 = 0.45 + 0.140 * np.sin(2 * np.pi * (u * 0.46 + phase + 0.30))
-    sig2 = 0.048 * (1 + 0.18 * np.sin(2 * np.pi * (u * 0.5 + phase + 0.6)))
-    img = img + ribbon(v, c2, sig2, SELECTION, 0.310, sharp=5)
-    img = img + ribbon(v, c2 - 0.055, 0.009, CONSTANT, 0.070, sharp=4)
+    dist = np.abs(f - np.round(f)) / grad
+    idx = np.abs(np.round(f)) % INDEX_EVERY < 0.5
+    del f, grad
 
-    c4 = 0.70 + 0.120 * np.sin(2 * np.pi * (u * 0.44 + phase + 0.55))
-    taper4 = 0.78 + 0.22 * np.sin(2 * np.pi * (u * 0.42 + phase + 0.85))
-    img = img + ribbon(v, c4, 0.052, SELECTION, 0.195, taper4, sharp=5)
-    img = img + ribbon(v, c4, 0.027, ACCENT, 0.140, taper4, sharp=5)
-    img = img + ribbon(v, c4 + 0.022, 0.007, TYPE, 0.052, taper4, sharp=4)
-    img = img + ribbon(v, c4 - 0.034, 0.005, FUNCTION, 0.040, taper4, sharp=4)
+    half = np.where(idx, np.float32(INDEX_PX), np.float32(LINE_PX)) * 0.5
+    t = np.clip((half + 0.8 - dist) / 1.6, 0, 1)
+    line = (t * t * (3 - 2 * t)).astype(np.float32)
+    line *= np.where(idx, np.float32(1.0), np.float32(0.62))
+    del t, half, idx
 
-    c3 = 0.93 + 0.105 * np.sin(2 * np.pi * (u * 0.40 + phase + 0.88))
-    taper3 = 0.76 + 0.24 * np.sin(2 * np.pi * (u * 0.45 + phase + 0.2))
-    img = img + ribbon(v, c3, 0.076, ACCENT, 0.062, taper3, sharp=4)
-    img = img + ribbon(v, c3, 0.040, ACCENT, 0.270, taper3, sharp=5)
-    img = img + ribbon(v, c3 - 0.05, 0.009, ACCENT_HOVER, 0.125, taper3, sharp=4)
-    img = img + ribbon(v, c3 - 0.072, 0.005, KEYWORD, 0.034, taper3, sharp=4)
+    haze = np.clip(1.0 - dist / 26.0, 0, 1)
+    haze = (haze * haze).astype(np.float32)
+    del dist
 
-    s1 = 0.28 + 0.26 * np.sin(2 * np.pi * (u * 0.34 + phase + 0.18))
-    img = img + ribbon(v, s1, 0.006, TYPE, 0.046, 0.55 + 0.45 * u, sharp=4)
-    s2 = 0.55 + 0.26 * np.sin(2 * np.pi * (u * 0.34 + phase + 0.24))
-    img = img + ribbon(v, s2, 0.005, CONSTANT, 0.038, 0.95 - 0.40 * u, sharp=4)
-    s3 = 0.80 + 0.26 * np.sin(2 * np.pi * (u * 0.34 + phase + 0.30))
-    img = img + ribbon(v, s3, 0.005, VARIABLE, 0.032, 0.60 + 0.40 * u, sharp=4)
+    col = ramp(elev)
 
-    cx_d = (u - 0.5) * 2.0
-    cy_d = (v - 0.5) * 2.0
-    r2 = cx_d**2 * 0.9 + cy_d**2 * 1.1
-    top_relief = np.clip(1 - v / 0.30, 0, 1) * np.clip((np.abs(u - 0.5) - 0.14) / 0.24, 0, 1)
-    vig_k = 0.34 * (1 - 0.75 * top_relief)
-    vig = 1.0 - vig_k * np.clip(r2 - 0.30, 0, None) ** 1.2
-    edge_mix = np.clip((r2 - 0.60) * 0.5, 0, 0.40) * (1 - 0.85 * top_relief)
-    img = img * vig[..., None]
-    img = img * (1 - edge_mix[..., None])
+    img = line[..., None] * col * np.float32(0.95)
+    img += haze[..., None] * col * np.float32(0.040)
+    del line, haze
+
+    img += (elev**2)[..., None] * col * np.float32(0.030)
+    del col
+
+    r2 = ((u - 0.5) * 2) ** 2 * 0.85 + ((v - 0.5) * 2) ** 2 * 1.05
+    vig = np.clip(1.0 - 0.42 * np.clip(r2 - 0.35, 0, None) ** 1.15, 0, 1).astype(np.float32)
+    img *= vig[..., None]
+    del r2, vig
 
     pool = notch_pool()
-    img = img * (1 - pool[..., None])
+    img *= (1.0 - pool)[..., None]
 
-    out = lin_to_srgb(np.clip(img, 0, 1))
+    img = 1.0 - np.exp(-img)
+    out = lin_to_srgb(np.clip(img, 0, 1)).astype(np.float32)
+    del img
 
-    rng = np.random.default_rng(7)
-    dither = (rng.random((H, W, 3)) + rng.random((H, W, 3)) - 1.0) / 255.0
-    grain = rng.normal(0.0, 0.55 / 255.0, (H, W, 1))
+    rng = np.random.default_rng(11)
+    dither = ((rng.random((H, W, 3), dtype=np.float32) + rng.random((H, W, 3), dtype=np.float32) - 1.0) / 255.0)
     lit = np.clip(out.max(axis=2, keepdims=True) * 30.0, 0, 1)
-    out = np.clip(out + (dither + grain) * lit * (1 - pool[..., None]), 0, 1)
+    out = np.clip(out + dither * lit * (1.0 - pool)[..., None], 0, 1)
 
     arr = (out * 255.0 + 0.5).astype(np.uint8)
     path = OUT_DIR / name
@@ -114,5 +147,23 @@ def render(name, phase):
     print("wrote", path)
 
 
-render("comfydark-horizon.png", phase=0.06)
-render("comfydark-corner.png", phase=0.52)
+render(
+    "comfydark-horizon.png",
+    phase=0.06,
+    relief=[
+        (0.72, 0.66, 0.30, 0.34, 1.25),
+        (0.30, 0.78, 0.26, 0.26, 0.70),
+        (0.14, 0.34, 0.24, 0.30, -0.85),
+        (0.92, 0.22, 0.22, 0.26, -0.55),
+    ],
+)
+render(
+    "comfydark-corner.png",
+    phase=0.52,
+    relief=[
+        (0.20, 0.74, 0.30, 0.30, 1.35),
+        (0.86, 0.86, 0.26, 0.24, 0.65),
+        (0.62, 0.30, 0.40, 0.36, -0.95),
+        (0.98, 0.10, 0.24, 0.22, -0.45),
+    ],
+)
