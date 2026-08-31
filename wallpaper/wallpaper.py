@@ -12,9 +12,6 @@ def hex_to_rgb(h):
     return np.array([int(h[i : i + 2], 16) for i in (0, 2, 4)], dtype=np.float64) / 255.0
 
 
-BG = hex_to_rgb("#161b22")
-BG_DEEP = hex_to_rgb("#0d1117")
-EDGE = hex_to_rgb("#0d1117") * 0.35
 ACCENT = hex_to_rgb("#1f6feb")
 ACCENT_HOVER = hex_to_rgb("#388bfd")
 SELECTION = hex_to_rgb("#264f78")
@@ -51,9 +48,7 @@ def notch_pool():
 
 
 def render(name, phase):
-    t = np.clip(0.2 * u + 0.8 * v, 0, 1)
-    base = srgb_to_lin(BG_DEEP)[None, None, :] * (1 - t[..., None]) + srgb_to_lin(BG)[None, None, :] * t[..., None]
-    img = base * 0.55
+    img = np.zeros((H, W, 3), dtype=np.float64)
 
     dip = np.exp(-(((u - 0.46) / 0.30) ** 2))
     sides = np.clip((np.abs(u - 0.5) - 0.14) / 0.24, 0, 1)
@@ -100,7 +95,7 @@ def render(name, phase):
     vig = 1.0 - vig_k * np.clip(r2 - 0.30, 0, None) ** 1.2
     edge_mix = np.clip((r2 - 0.60) * 0.5, 0, 0.40) * (1 - 0.85 * top_relief)
     img = img * vig[..., None]
-    img = img * (1 - edge_mix[..., None]) + srgb_to_lin(EDGE)[None, None, :] * edge_mix[..., None]
+    img = img * (1 - edge_mix[..., None])
 
     pool = notch_pool()
     img = img * (1 - pool[..., None])
@@ -110,7 +105,8 @@ def render(name, phase):
     rng = np.random.default_rng(7)
     dither = (rng.random((H, W, 3)) + rng.random((H, W, 3)) - 1.0) / 255.0
     grain = rng.normal(0.0, 0.55 / 255.0, (H, W, 1))
-    out = np.clip(out + (dither + grain) * (1 - pool[..., None]), 0, 1)
+    lit = np.clip(out.max(axis=2, keepdims=True) * 30.0, 0, 1)
+    out = np.clip(out + (dither + grain) * lit * (1 - pool[..., None]), 0, 1)
 
     arr = (out * 255.0 + 0.5).astype(np.uint8)
     path = OUT_DIR / name
