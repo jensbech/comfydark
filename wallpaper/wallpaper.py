@@ -12,13 +12,17 @@ def hex_to_rgb(h):
     return np.array([int(h[i : i + 2], 16) for i in (0, 2, 4)], dtype=np.float64) / 255.0
 
 
-BG = hex_to_rgb("#0d1117")
-BG_DEEP = hex_to_rgb("#0a0e14")
-EDGE = hex_to_rgb("#010409")
+BG = hex_to_rgb("#161b22")
+BG_DEEP = hex_to_rgb("#0d1117")
+EDGE = hex_to_rgb("#0d1117") * 0.35
 ACCENT = hex_to_rgb("#1f6feb")
 ACCENT_HOVER = hex_to_rgb("#388bfd")
 SELECTION = hex_to_rgb("#264f78")
-CYAN = hex_to_rgb("#4ec9b0")
+TYPE = hex_to_rgb("#4ec9b0")
+VARIABLE = hex_to_rgb("#9cdcfe")
+CONSTANT = hex_to_rgb("#4fc1ff")
+FUNCTION = hex_to_rgb("#dcdcaa")
+KEYWORD = hex_to_rgb("#c586c0")
 
 yy, xx = np.mgrid[0:H, 0:W].astype(np.float64)
 u = xx / W
@@ -33,15 +37,15 @@ def lin_to_srgb(c):
     return np.where(c <= 0.0031308, c * 12.92, 1.055 * np.clip(c, 0, None) ** (1 / 2.4) - 0.055)
 
 
-def ribbon(path_v, sigma, color, strength, taper=None):
-    fall = np.exp(-(((v - path_v) / sigma) ** 2))
+def ribbon(vv, path_v, sigma, color, strength, taper=None, sharp=2):
+    fall = np.exp(-(np.abs((vv - path_v) / sigma) ** sharp))
     if taper is not None:
         fall = fall * taper
     return fall[..., None] * srgb_to_lin(color)[None, None, :] * strength
 
 
 def notch_pool():
-    d = np.sqrt(((u - 0.5) / 0.16) ** 2 + (v / 0.06) ** 2)
+    d = np.sqrt(((u - 0.5) / 0.165) ** 2 + (v / 0.068) ** 2)
     m = np.clip((2.6 - d) / (2.6 - 1.0), 0, 1)
     return m * m * (3 - 2 * m)
 
@@ -49,32 +53,44 @@ def notch_pool():
 def render(name, phase):
     t = np.clip(0.2 * u + 0.8 * v, 0, 1)
     base = srgb_to_lin(BG_DEEP)[None, None, :] * (1 - t[..., None]) + srgb_to_lin(BG)[None, None, :] * t[..., None]
-    img = base * 0.62
+    img = base * 0.55
 
-    dip = np.exp(-(((u - 0.46) / 0.27) ** 2))
-    wave = np.sin(2 * np.pi * (u * 1.15 + phase))
-
-    c1 = 0.015 + 0.31 * dip + 0.025 * wave
+    dip = np.exp(-(((u - 0.46) / 0.30) ** 2))
     sides = np.clip((np.abs(u - 0.5) - 0.14) / 0.24, 0, 1)
     sides = sides * sides * (3 - 2 * sides)
-    taper1 = 1.0 + 1.0 * sides
-    img = img + ribbon(c1 + 0.02, 0.19, ACCENT, 0.016, taper1)
-    img = img + ribbon(c1, 0.085, ACCENT, 0.030, taper1)
-    img = img + ribbon(c1 + 0.035, 0.030, ACCENT_HOVER, 0.016, taper1)
 
-    c2 = 0.52 + 0.11 * np.sin(2 * np.pi * (u * 0.7 + phase + 0.35))
-    sig2 = 0.13 * (1 + 0.25 * np.sin(2 * np.pi * (u * 0.9 + phase + 0.6)))
-    img = img + ribbon(c2, sig2, SELECTION, 0.070)
-    img = img + ribbon(c2 - 0.055, 0.035, ACCENT_HOVER, 0.012)
+    c1 = 0.045 + 0.27 * dip + 0.072 * np.sin(2 * np.pi * (u * 0.50 + phase))
+    taper1 = 1.0 + 0.85 * sides
+    img = img + ribbon(v, c1 + 0.02, 0.062, ACCENT, 0.050, taper1, sharp=4)
+    img = img + ribbon(v, c1, 0.030, ACCENT, 0.155, taper1, sharp=5)
+    img = img + ribbon(v, c1 + 0.035, 0.007, VARIABLE, 0.072, taper1, sharp=4)
+    img = img + ribbon(v, c1 - 0.042, 0.006, TYPE, 0.050, taper1, sharp=4)
 
-    c3 = 0.88 + 0.07 * np.sin(2 * np.pi * (u * 0.55 + phase + 0.7))
-    taper3 = 0.55 + 0.45 * np.sin(2 * np.pi * (u * 0.5 + phase + 0.2))
-    img = img + ribbon(c3, 0.24, ACCENT, 0.020, taper3)
-    img = img + ribbon(c3, 0.12, ACCENT, 0.058, taper3)
-    img = img + ribbon(c3 - 0.05, 0.030, ACCENT_HOVER, 0.018, taper3)
+    c2 = 0.45 + 0.140 * np.sin(2 * np.pi * (u * 0.46 + phase + 0.30))
+    sig2 = 0.048 * (1 + 0.18 * np.sin(2 * np.pi * (u * 0.5 + phase + 0.6)))
+    img = img + ribbon(v, c2, sig2, SELECTION, 0.310, sharp=5)
+    img = img + ribbon(v, c2 - 0.055, 0.009, CONSTANT, 0.070, sharp=4)
 
-    taper4 = np.exp(-(((u - (0.18 + 0.5 * phase)) / 0.30) ** 2))
-    img = img + ribbon(c1 - 0.045, 0.018, CYAN, 0.016, taper4)
+    c4 = 0.70 + 0.120 * np.sin(2 * np.pi * (u * 0.44 + phase + 0.55))
+    taper4 = 0.78 + 0.22 * np.sin(2 * np.pi * (u * 0.42 + phase + 0.85))
+    img = img + ribbon(v, c4, 0.052, SELECTION, 0.195, taper4, sharp=5)
+    img = img + ribbon(v, c4, 0.027, ACCENT, 0.140, taper4, sharp=5)
+    img = img + ribbon(v, c4 + 0.022, 0.007, TYPE, 0.052, taper4, sharp=4)
+    img = img + ribbon(v, c4 - 0.034, 0.005, FUNCTION, 0.040, taper4, sharp=4)
+
+    c3 = 0.93 + 0.105 * np.sin(2 * np.pi * (u * 0.40 + phase + 0.88))
+    taper3 = 0.76 + 0.24 * np.sin(2 * np.pi * (u * 0.45 + phase + 0.2))
+    img = img + ribbon(v, c3, 0.076, ACCENT, 0.062, taper3, sharp=4)
+    img = img + ribbon(v, c3, 0.040, ACCENT, 0.270, taper3, sharp=5)
+    img = img + ribbon(v, c3 - 0.05, 0.009, ACCENT_HOVER, 0.125, taper3, sharp=4)
+    img = img + ribbon(v, c3 - 0.072, 0.005, KEYWORD, 0.034, taper3, sharp=4)
+
+    s1 = 0.28 + 0.26 * np.sin(2 * np.pi * (u * 0.34 + phase + 0.18))
+    img = img + ribbon(v, s1, 0.006, TYPE, 0.046, 0.55 + 0.45 * u, sharp=4)
+    s2 = 0.55 + 0.26 * np.sin(2 * np.pi * (u * 0.34 + phase + 0.24))
+    img = img + ribbon(v, s2, 0.005, CONSTANT, 0.038, 0.95 - 0.40 * u, sharp=4)
+    s3 = 0.80 + 0.26 * np.sin(2 * np.pi * (u * 0.34 + phase + 0.30))
+    img = img + ribbon(v, s3, 0.005, VARIABLE, 0.032, 0.60 + 0.40 * u, sharp=4)
 
     cx_d = (u - 0.5) * 2.0
     cy_d = (v - 0.5) * 2.0
